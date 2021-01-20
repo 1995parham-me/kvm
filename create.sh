@@ -47,5 +47,4 @@ sudo virt-install --name usvm-$id \
   --disk path=$HOME/kvm/pool/usvm-$id.qcow2,device=disk \
   --os-type Linux --os-variant archlinux \
   --network bridge=br0,model=virtio,mac=$mac_addr \
-  --import \
-  --noautoconsole
+  --import
