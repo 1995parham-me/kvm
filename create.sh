@@ -38,7 +38,7 @@ cloud-localds -v --network-config=network-config-usvm-$id usvm-$id.qcow2 usvm-$i
 rm usvm-$id.cfg
 rm network-config-usvm-$id
 
-qemu-img create -F qcow2 -b $HOME/kvm/base/Arch-Linux-x86_64-cloudimg-20210119.13892.qcow2 -f qcow2 $HOME/kvm/pool/usvm-$id.qcow2 20G
+qemu-img create -F qcow2 -b $HOME/kvm/base/Arch-Linux-x86_64-cloudimg-*.qcow2 -f qcow2 $HOME/kvm/pool/usvm-$id.qcow2 20G
 
 sudo virt-install --name usvm-$id \
   --virt-type kvm --memory 2048 --vcpus 2 \
