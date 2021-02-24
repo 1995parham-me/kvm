@@ -38,13 +38,14 @@ cloud-localds -v --network-config=network-config-usvm-$id usvm-$id.qcow2 usvm-$i
 rm usvm-$id.cfg
 rm network-config-usvm-$id
 
-qemu-img create -F qcow2 -b $HOME/kvm/base/Arch-Linux-x86_64-cloudimg-*.qcow2 -f qcow2 $HOME/kvm/pool/usvm-$id.qcow2 20G
+# qemu-img create -F qcow2 -b $HOME/kvm/base/Arch-Linux-x86_64-cloudimg-*.qcow2 -f qcow2 $HOME/kvm/pool/usvm-$id.qcow2 20G
+qemu-img create -F qcow2 -b $HOME/kvm/base/focal-server-cloudimg-amd64.img -f qcow2 $HOME/kvm/pool/usvm-$id.qcow2 20G
 
 sudo virt-install --name usvm-$id \
   --virt-type kvm --memory 2048 --vcpus 2 \
   --boot hd,menu=on \
   --disk path=$HOME/kvm/seed/usvm-$id.qcow2,device=cdrom \
   --disk path=$HOME/kvm/pool/usvm-$id.qcow2,device=disk \
-  --os-type Linux --os-variant archlinux \
+  --os-type Linux --os-variant ubuntu20.04 \
   --network bridge=br0,model=virtio,mac=$mac_addr \
   --import
