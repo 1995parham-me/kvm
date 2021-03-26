@@ -10,6 +10,15 @@
 # https://stackoverflow.com/questions/3822621/how-to-exit-if-a-command-failed
 set -e
 
+echo '
+   ____  _  ___   ___  ____                   _
+  / __ \/ |/ _ \ / _ \| ___| _ __   __ _ _ __| |__   __ _ _ __ ___
+ / / _` | | (_) | (_) |___ \| |_ \ / _| | |__| |_ \ / _| | |_ | _ \
+| | (_| | |\__, |\__, |___) | |_) | (_| | |  | | | | (_| | | | | | |
+ \ \__,_|_|  /_/   /_/|____/| .__/ \__,_|_|  |_| |_|\__,_|_| |_| |_|
+  \____/                    |_|
+'
+
 # print log message with following format
 # [module] message
 message() {
