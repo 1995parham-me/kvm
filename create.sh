@@ -76,6 +76,7 @@ rm usvm-$id.cfg
 rm network-config-usvm-$id
 
 read -p "you have the configuration image, do you want to continue? (Y/n)" -n 1 confirm
+echo
 if [[ $confirm != "Y" ]]; then
 	exit
 fi
@@ -103,6 +104,7 @@ case $os in
 esac
 
 read -p "you have the image, do you want to continue? (Y/n)" -n 1 confirm
+echo
 if [[ $confirm != "Y" ]]; then
 	exit
 fi
