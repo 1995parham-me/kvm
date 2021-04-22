@@ -1,4 +1,5 @@
 # kvm
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/1995parham-me/kvm/Shell%20Script%20Lint?label=sh-lint&logo=github&style=flat-square)
 
 ## Introduction
 
