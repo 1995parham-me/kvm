@@ -57,7 +57,11 @@ if [[ ! "$gateway" =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([
 	exit
 fi
 
+# reads parham/root password
+read -p 'password: ' -e password
+
 sed "s/usvm/usvm-$id/g" usvm.cfg > usvm-$id.cfg
+sed "s/secret/$password/g" -i usvm-$id.cfg
 
 # generates a random mac address
 mac_addr=$(printf '52:54:00:%02x:%02x:%02x' $((RANDOM % 256)) $((RANDOM % 256)) $((RANDOM % 256)))
@@ -102,8 +106,9 @@ case $os in
 		os_variant=ubuntu20.04
 		;;
 	arch)
-		message "virt" "create archlinux image based on $HOME/kvm/base/Arch-Linux-x86_64-cloudimg-*.qcow2 in $HOME/kvm/pool/usvm-$id.qcow2"
-		qemu-img create -F qcow2 -b $HOME/kvm/base/Arch-Linux-x86_64-cloudimg-*.qcow2 -f qcow2 $HOME/kvm/pool/usvm-$id.qcow2 $size
+		image=$(find "$HOME/kvm/base" -name 'Arch-Linux-x86_64-cloudimg-*.qcow2' | head -1 )
+		message "virt" "create archlinux image based on $image in $HOME/kvm/pool/usvm-$id.qcow2"
+		qemu-img create -F qcow2 -b "$image" -f qcow2 $HOME/kvm/pool/usvm-$id.qcow2 $size
 		os_variant=archlinux
 		;;
 	*)
