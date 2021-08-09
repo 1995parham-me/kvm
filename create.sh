@@ -144,7 +144,9 @@ if [[ $confirm != "Y" ]]; then
 	exit
 fi
 
-message "virt" "create $os_variant virtual machine which is named usvm-$id and attached to br0"
+read -r -p "bridge: " -i "br0" -e bridge
+
+message "virt" "create $os_variant virtual machine which is named usvm-$id and attached to $bridge"
 
 sudo virt-install --name "usvm-$id" \
 	--virt-type kvm --memory "$memory" --vcpus "$vcpus" \
@@ -152,5 +154,5 @@ sudo virt-install --name "usvm-$id" \
 	--disk "path=$HOME/kvm/seed/usvm-$id.qcow2,device=cdrom" \
 	--disk "path=$HOME/kvm/pool/usvm-$id.qcow2,device=disk" \
 	--os-type Linux --os-variant $os_variant \
-	--network bridge=br0,model=virtio,mac="$mac_addr" \
+	--network bridge="$bridge",model=virtio,mac="$mac_addr" \
 	--import
