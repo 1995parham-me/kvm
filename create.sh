@@ -38,24 +38,32 @@ fi
 
 # reads ip address from user.
 # http://www.ipregex.com/
+dhcp=1
 read -r -p "ip address: " -i "192.168.73.0" -e ip
-if [[ ! "$ip" =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$ ]]; then
+if [[ "$ip" == "-" ]]; then
+	dhcp=0
+	message "cloud-init" "use dhcp instead of ip address"
+elif [[ ! "$ip" =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$ ]]; then
 	message "cloud-init" "$ip ip addresses isn't valid"
 	exit
 fi
 
 # reads subnet mask
-read -r -p "subnet mask: " -i "24" -e netmask
-if [[ ! $netmask -lt 32 ]] || [[ ! $netmask -gt 0 ]]; then
-	message "cloud-init" "$netmask network mask isn't valid"
-	exit
+if [ ! $dhcp ]; then
+	read -r -p "subnet mask: " -i "24" -e netmask
+	if [[ ! $netmask -lt 32 ]] || [[ ! $netmask -gt 0 ]]; then
+		message "cloud-init" "$netmask network mask isn't valid"
+		exit
+	fi
 fi
 
 # reads gateway/dns address
-read -r -p 'gateway: ' -i '192.168.73.254' -e gateway
-if [[ ! "$gateway" =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$ ]]; then
-	message "cloud-init" "$gateway ip addresses isn't valid"
-	exit
+if [ ! $dhcp ]; then
+	read -r -p 'gateway: ' -i '192.168.73.254' -e gateway
+	if [[ ! "$gateway" =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$ ]]; then
+		message "cloud-init" "$gateway ip addresses isn't valid"
+		exit
+	fi
 fi
 
 # reads parham/root password
@@ -67,7 +75,18 @@ sed "s/secret/$password/g" -i "usvm-$id.cfg"
 # generates a random mac address
 mac_addr=$(printf '52:54:00:%02x:%02x:%02x' $((RANDOM % 256)) $((RANDOM % 256)) $((RANDOM % 256)))
 
-cat >"network-config-usvm-$id" <<EOF
+if [ $dhcp ]; then
+	cat >"network-config-usvm-$id" <<EOF
+ethernets:
+    eth0:
+        dhcp4: true
+        match:
+            macaddress: $mac_addr
+        set-name: eth0
+version: 2
+EOF
+else
+	cat >"network-config-usvm-$id" <<EOF
 ethernets:
     eth0:
         addresses:
@@ -82,6 +101,7 @@ ethernets:
         set-name: eth0
 version: 2
 EOF
+fi
 
 message "cloud-init" "generate configuration image that must be mount as cd/dvd into a virtual machine"
 cloud-localds -v --network-config="network-config-usvm-$id" "usvm-$id.qcow2" "usvm-$id.cfg"
