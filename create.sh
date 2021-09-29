@@ -39,7 +39,7 @@ fi
 # reads ip address from user.
 # http://www.ipregex.com/
 dhcp=1
-read -r -p "ip address: " -i "192.168.73.0" -e ip
+read -r -p "ip address [use - for dhcp]: " -i "192.168.73.0" -e ip
 if [[ "$ip" == "-" ]]; then
 	dhcp=0
 	message "cloud-init" "use dhcp instead of ip address"
