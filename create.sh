@@ -49,7 +49,7 @@ elif [[ ! "$ip" =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9
 fi
 
 # reads subnet mask
-if [ ! $dhcp ]; then
+if [ $dhcp -eq 1 ]; then
 	read -r -p "subnet mask: " -i "24" -e netmask
 	if [[ ! $netmask -lt 32 ]] || [[ ! $netmask -gt 0 ]]; then
 		message "cloud-init" "$netmask network mask isn't valid"
@@ -58,7 +58,7 @@ if [ ! $dhcp ]; then
 fi
 
 # reads gateway/dns address
-if [ ! $dhcp ]; then
+if [ $dhcp -eq 1 ]; then
 	read -r -p 'gateway: ' -i '192.168.73.254' -e gateway
 	if [[ ! "$gateway" =~ ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$ ]]; then
 		message "cloud-init" "$gateway ip addresses isn't valid"
