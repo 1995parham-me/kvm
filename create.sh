@@ -131,6 +131,8 @@ arch)
 	message "virt" "create archlinux image based on $image in $HOME/kvm/pool/usvm-$id.qcow2"
 	qemu-img create -F qcow2 -b "$image" -f qcow2 "$HOME/kvm/pool/usvm-$id.qcow2" "$size"
 	os_variant=archlinux
+
+	message "virt" "please consider the locale.gen issue"
 	;;
 *)
 	message "virt" "os must be arch or ubuntu"
