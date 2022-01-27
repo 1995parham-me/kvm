@@ -75,7 +75,7 @@ sed "s/secret/$password/g" -i "usvm-$id.cfg"
 # generates a random mac address
 mac_addr=$(printf '52:54:00:%02x:%02x:%02x' $((RANDOM % 256)) $((RANDOM % 256)) $((RANDOM % 256)))
 
-if [ $dhcp ]; then
+if [ $dhcp -eq 0 ]; then
 	cat >"network-config-usvm-$id" <<EOF
 ethernets:
     eth0:
