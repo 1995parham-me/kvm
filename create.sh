@@ -82,10 +82,6 @@ ethernets:
         dhcp4: true
         match:
             macaddress: $mac_addr
-        nameservers:
-            addresses:
-	    - 185.51.200.2
-	    - 178.22.122.100
         set-name: eth0
 version: 2
 EOF
@@ -101,8 +97,6 @@ ethernets:
             macaddress: $mac_addr
         nameservers:
             addresses:
-	    - 185.51.200.2
-	    - 178.22.122.100
             - $gateway
         set-name: eth0
 version: 2
