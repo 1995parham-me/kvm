@@ -1,14 +1,6 @@
 #!/bin/bash
-# In The Name of God
-# ========================================
-# [] File Name : create.sh
-#
-# [] Creation Date : 19-01-2021
-#
-# [] Created By : Parham Alvani <parham.alvani@gmail.com>
-# =======================================
-# https://stackoverflow.com/questions/3822621/how-to-exit-if-a-command-failed
-set -e
+
+set -eu
 
 # shellcheck disable=1004
 echo '
