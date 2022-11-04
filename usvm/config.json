@@ -1,0 +1,7 @@
+[
+  {
+    "name": "usvm",
+    "box": "archlinux/archlinux",
+    "no_share": true
+  }
+]
