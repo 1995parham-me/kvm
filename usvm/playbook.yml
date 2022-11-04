@@ -20,7 +20,7 @@
   become: true
   hosts: all
   tasks:
-    - name: motd
+    - name: Update Message of the Day
       ansible.builtin.template:
         mode: 0644
         src: templates/motd
