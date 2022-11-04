@@ -2,6 +2,7 @@
   {
     "name": "usvm",
     "box": "archlinux/archlinux",
+    // "box": "generic/ubuntu2204",
     "no_share": true
   }
 ]
