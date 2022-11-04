@@ -1,0 +1,22 @@
+Vagrant.require_version ">= 2.0.0"
+
+require 'json'
+
+f = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'config.json')))
+
+Vagrant.configure("2") do |config|
+  config.vm.box_check_update = true
+
+  f.each do |g|
+    config.vm.define g['name'] do |s|
+      s.vm.box = g['box']
+      s.vm.hostname = g['name']
+      s.vm.synced_folder ".", "/vagrant", disabled: g['no_share']
+    end
+  end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+    ansible.verbose = "vv"
+  end
+end
