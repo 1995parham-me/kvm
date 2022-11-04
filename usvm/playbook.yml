@@ -1,0 +1,27 @@
+---
+- hosts: all
+  name: Required packages
+  become: true
+  tasks:
+    - name: Install git
+      community.general.pacman:
+        state: latest
+        update_cache: true
+        name:
+          - base-devel
+          - git
+
+- name: Dotfiles
+  hosts: all
+  roles:
+    - 1995parham-me
+
+- name: Message of the day
+  become: true
+  hosts: all
+  tasks:
+    - name: motd
+      ansible.builtin.template:
+        mode: 0644
+        src: templates/motd
+        dest: /etc/motd
