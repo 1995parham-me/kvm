@@ -1,0 +1,7 @@
+[
+  {
+    "name": "wsvm",
+    "box": "jborean93/WindowsServer2022",
+    "no_share": true
+  }
+]
