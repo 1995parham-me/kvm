@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
   f.each do |g|
     config.vm.define g['name'] do |s|
       s.vm.box = g['box']
-      s.vm.hostname = g['name']
+      s.vm.hostname = "#{g['name']}-1995parham-infra"
       # share current directory in guest machine under path: /vagrant.
       s.vm.synced_folder ".", "/vagrant", disabled: g['no_share']
       s.vm.provider "libvirt" do |lv|
