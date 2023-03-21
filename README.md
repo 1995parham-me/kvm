@@ -1,4 +1,8 @@
-# KVM
+<h1 align="center"> KVM </h1>
+
+<p align="center">
+  <img alt="logo" src="./.github/assets/logo.png" />
+</p>
 
 ## Introduction
 
