@@ -1,0 +1,57 @@
+#cloud-config
+hostname: ${hostname}
+fqdn: ${hostname}
+manage_etc_hosts: true
+
+# Create default user
+users:
+  - name: parham
+    groups: sudo,docker
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+%{ if length(ssh_authorized_keys) > 0 ~}
+    ssh_authorized_keys:
+%{ for key in ssh_authorized_keys ~}
+      - ${key}
+%{ endfor ~}
+%{ endif ~}
+
+# Package management
+package_update: true
+package_upgrade: true
+
+packages:
+  - git
+  - build-essential
+  - curl
+  - wget
+  - vim
+  - htop
+  - net-tools
+  - ca-certificates
+%{ if enable_ansible ~}
+  - ansible
+  - python3-pip
+%{ endif ~}
+
+# Enable password authentication for emergency access
+ssh_pwauth: false
+disable_root: true
+
+# Set timezone
+timezone: UTC
+
+# Run commands on first boot
+runcmd:
+  - systemctl enable ssh
+  - systemctl start ssh
+  - echo "VM provisioned successfully" > /etc/motd
+  - echo "Hostname: ${hostname}" >> /etc/motd
+%{ if enable_ansible ~}
+  - echo "Ansible: enabled" >> /etc/motd
+%{ endif ~}
+
+# Reboot if kernel was updated
+power_state:
+  mode: reboot
+  condition: test -f /var/run/reboot-required
