@@ -38,7 +38,7 @@ status:
 
 # List all VMs
 list:
-    @virsh list --all
+    @sudo @sudo virsh list --all
 
 # SSH into a VM (usage: just ssh usvm)
 ssh VM:
@@ -63,55 +63,55 @@ clean:
 
 # Open virsh console (usage: just console usvm)
 console VM:
-    virsh console {{ VM }}
+    @sudo virsh console {{ VM }}
 
 # Start a stopped VM (usage: just start usvm)
 start VM:
-    virsh start {{ VM }}
+    @sudo virsh start {{ VM }}
 
 # Stop a running VM (usage: just stop usvm)
 stop VM:
-    virsh shutdown {{ VM }}
+    @sudo virsh shutdown {{ VM }}
 
 # Restart a VM (usage: just restart usvm)
 restart VM:
-    virsh reboot {{ VM }}
+    @sudo virsh reboot {{ VM }}
 
 # Create a snapshot (usage: just snapshot usvm snap1)
 snapshot VM NAME:
-    virsh snapshot-create-as {{ VM }} {{ NAME }}
+    @sudo virsh snapshot-create-as {{ VM }} {{ NAME }}
 
 # List snapshots (usage: just snapshot-list usvm)
 snapshot-list VM:
-    virsh snapshot-list {{ VM }}
+    @sudo virsh snapshot-list {{ VM }}
 
 # Restore a snapshot (usage: just snapshot-restore usvm snap1)
 snapshot-restore VM NAME:
-    virsh snapshot-revert {{ VM }} {{ NAME }}
+    @sudo virsh snapshot-revert {{ VM }} {{ NAME }}
 
 # Delete a snapshot (usage: just snapshot-delete usvm snap1)
 snapshot-delete VM NAME:
-    virsh snapshot-delete {{ VM }} {{ NAME }}
+    @sudo virsh snapshot-delete {{ VM }} {{ NAME }}
 
 # Show detailed VM info (usage: just info usvm)
 info VM:
-    virsh dominfo {{ VM }}
+    @sudo virsh dominfo {{ VM }}
 
 # Force stop a VM (usage: just force-stop usvm)
 force-stop VM:
-    virsh destroy {{ VM }}
+    @sudo virsh destroy {{ VM }}
 
 # Auto-start VM on host boot (usage: just autostart usvm)
 autostart VM:
-    virsh autostart {{ VM }}
+    @sudo virsh autostart {{ VM }}
 
 # Disable auto-start (usage: just no-autostart usvm)
 no-autostart VM:
-    virsh autostart --disable {{ VM }}
+    @sudo virsh autostart --disable {{ VM }}
 
 # Show VM console output (usage: just logs usvm)
 logs VM:
-    virsh console {{ VM }} --force
+    @sudo virsh console {{ VM }} --force
 
 # Run Ansible playbook on a VM (usage: just ansible usvm playbook.yml)
 ansible VM PLAYBOOK:
