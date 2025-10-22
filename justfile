@@ -44,9 +44,9 @@ list:
 ssh VM:
     #!/usr/bin/env bash
     set -euo pipefail
-    IP=$(terraform output -json vm_ips 2>/dev/null | jq -r '.{{VM}} // empty')
+    IP=$(terraform output -json vm_ips 2>/dev/null | jq -r '.{{ VM }} // empty')
     if [ -z "$IP" ]; then
-        echo "VM '{{VM}}' not found"
+        echo "VM '{{ VM }}' not found"
         echo "Available VMs:"
         terraform output -json vm_ips 2>/dev/null | jq -r 'keys[]' || echo "No VMs found"
         exit 1
@@ -63,63 +63,63 @@ clean:
 
 # Open virsh console (usage: just console usvm)
 console VM:
-    virsh console {{VM}}
+    virsh console {{ VM }}
 
 # Start a stopped VM (usage: just start usvm)
 start VM:
-    virsh start {{VM}}
+    virsh start {{ VM }}
 
 # Stop a running VM (usage: just stop usvm)
 stop VM:
-    virsh shutdown {{VM}}
+    virsh shutdown {{ VM }}
 
 # Restart a VM (usage: just restart usvm)
 restart VM:
-    virsh reboot {{VM}}
+    virsh reboot {{ VM }}
 
 # Create a snapshot (usage: just snapshot usvm snap1)
 snapshot VM NAME:
-    virsh snapshot-create-as {{VM}} {{NAME}}
+    virsh snapshot-create-as {{ VM }} {{ NAME }}
 
 # List snapshots (usage: just snapshot-list usvm)
 snapshot-list VM:
-    virsh snapshot-list {{VM}}
+    virsh snapshot-list {{ VM }}
 
 # Restore a snapshot (usage: just snapshot-restore usvm snap1)
 snapshot-restore VM NAME:
-    virsh snapshot-revert {{VM}} {{NAME}}
+    virsh snapshot-revert {{ VM }} {{ NAME }}
 
 # Delete a snapshot (usage: just snapshot-delete usvm snap1)
 snapshot-delete VM NAME:
-    virsh snapshot-delete {{VM}} {{NAME}}
+    virsh snapshot-delete {{ VM }} {{ NAME }}
 
 # Show detailed VM info (usage: just info usvm)
 info VM:
-    virsh dominfo {{VM}}
+    virsh dominfo {{ VM }}
 
 # Force stop a VM (usage: just force-stop usvm)
 force-stop VM:
-    virsh destroy {{VM}}
+    virsh destroy {{ VM }}
 
 # Auto-start VM on host boot (usage: just autostart usvm)
 autostart VM:
-    virsh autostart {{VM}}
+    virsh autostart {{ VM }}
 
 # Disable auto-start (usage: just no-autostart usvm)
 no-autostart VM:
-    virsh autostart --disable {{VM}}
+    virsh autostart --disable {{ VM }}
 
 # Show VM console output (usage: just logs usvm)
 logs VM:
-    virsh console {{VM}} --force
+    virsh console {{ VM }} --force
 
 # Run Ansible playbook on a VM (usage: just ansible usvm playbook.yml)
 ansible VM PLAYBOOK:
     #!/usr/bin/env bash
     set -euo pipefail
-    IP=$(terraform output -json vm_ips 2>/dev/null | jq -r '.{{VM}} // empty')
+    IP=$(terraform output -json vm_ips 2>/dev/null | jq -r '.{{ VM }} // empty')
     if [ -z "$IP" ]; then
-        echo "VM '{{VM}}' not found"
+        echo "VM '{{ VM }}' not found"
         exit 1
     fi
-    ansible-playbook -i "${IP}," {{PLAYBOOK}}
+    ansible-playbook -i "${IP}," {{ PLAYBOOK }}
