@@ -35,3 +35,15 @@ variable "ssh_authorized_keys" {
   type        = list(string)
   default     = []
 }
+
+variable "network_domain" {
+  description = "Network domain for VMs"
+  type        = string
+  default     = "1995parham.usvm"
+}
+
+variable "network_cidr" {
+  description = "CIDR block for VM network"
+  type        = string
+  default     = "192.168.122.0/24"
+}

@@ -24,6 +24,6 @@ output "ssh_commands" {
   description = "SSH commands to connect to VMs"
   value = {
     for name, vm in libvirt_domain.vms :
-    name => "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${try(vm.network_interface[0].addresses[0], "PENDING")}"
+    name => "ssh ${local.ssh_options} ${try(vm.network_interface[0].addresses[0], "PENDING")}"
   }
 }
