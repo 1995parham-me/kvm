@@ -2,23 +2,18 @@ name: Terraform
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   terraform:
-    name: Terraform Lint and Validate
+    name: Terraform Lint and Validation
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "~1.5"
+      - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Format Check
         id: fmt

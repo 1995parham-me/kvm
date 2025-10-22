@@ -1,13 +1,13 @@
 variable "vms" {
   description = "Map of VMs to create"
   type = map(object({
-    memory      = number
-    cpus        = number
-    disk_size   = number # in GB
-    image_url   = string
-    autostart   = optional(bool, false)
-    ssh_keys    = optional(list(string), [])
-    user_data   = optional(string, "")
+    memory         = number
+    cpus           = number
+    disk_size      = number # in GB
+    image_url      = string
+    autostart      = optional(bool, false)
+    ssh_keys       = optional(list(string), [])
+    user_data      = optional(string, "")
     enable_ansible = optional(bool, false)
   }))
 }
