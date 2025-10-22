@@ -1,5 +1,26 @@
+# Create storage pool
+resource "libvirt_pool" "vm_pool" {
+  name = var.pool_name
+  type = "dir"
+
+  target {
+    path = "/var/lib/libvirt/images"
+  }
+}
+
+# Create default network
+resource "libvirt_network" "vm_network" {
+  name      = var.network_name
+  mode      = "nat"
+  domain    = "1995parham.usvm"
+  addresses = ["192.168.122.0/24"]
+  autostart = true
+}
+
 # Download cloud images
 resource "libvirt_volume" "base_images" {
+  depends_on = [libvirt_pool.vm_pool]
+
   for_each = { for k, v in var.vms : k => v.image_url }
 
   name   = "${each.key}-base.qcow2"
@@ -48,7 +69,7 @@ resource "libvirt_domain" "vms" {
   }
 
   network_interface {
-    network_name   = var.network_name
+    network_id     = libvirt_network.vm_network.id
     wait_for_lease = true
   }
 
