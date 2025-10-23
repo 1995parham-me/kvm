@@ -116,35 +116,40 @@ just fmt            # Format Terraform files
 ## Available Cloud Images
 
 ### Ubuntu
+
 - **24.04 LTS** (Recommended): `https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img`
 - **22.04 LTS**: `https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-amd64.img`
 
 ### Debian
+
 - **12 (Bookworm)**: `https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2`
 
 ### Arch Linux
+
 - **Latest**: `https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2`
 
 ### Fedora
+
 - **40**: `https://download.fedoraproject.org/pub/fedora/linux/releases/40/Cloud/x86_64/images/Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2`
 
 ## Configuration Details
 
 ### VM Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `memory` | number | - | RAM in MB |
-| `cpus` | number | - | Number of vCPUs |
-| `disk_size` | number | - | Root disk size in GB |
-| `image_url` | string | - | Cloud image URL |
-| `autostart` | bool | false | Auto-start VM on host boot |
-| `ssh_keys` | list | [] | VM-specific SSH keys |
-| `enable_ansible` | bool | false | Install Ansible in VM |
+| Option           | Type   | Default | Description                |
+| ---------------- | ------ | ------- | -------------------------- |
+| `memory`         | number | -       | RAM in MB                  |
+| `cpus`           | number | -       | Number of vCPUs            |
+| `disk_size`      | number | -       | Root disk size in GB       |
+| `image_url`      | string | -       | Cloud image URL            |
+| `autostart`      | bool   | false   | Auto-start VM on host boot |
+| `ssh_keys`       | list   | []      | VM-specific SSH keys       |
+| `enable_ansible` | bool   | false   | Install Ansible in VM      |
 
 ### Cloud-Init
 
 VMs are provisioned with cloud-init, which:
+
 - Sets hostname
 - Creates user `parham` with sudo access
 - Installs essential packages (git, build-essential, etc.)
@@ -226,6 +231,7 @@ groups | grep libvirt
 ### VM fails to get IP
 
 Check network:
+
 ```bash
 virsh net-list --all
 virsh net-start default  # if not active
@@ -234,6 +240,7 @@ virsh net-start default  # if not active
 ### Cloud-init not working
 
 View cloud-init logs in VM:
+
 ```bash
 just console usvm
 # Login and check: sudo cloud-init status --long
