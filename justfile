@@ -123,3 +123,77 @@ ansible VM PLAYBOOK:
         exit 1
     fi
     ansible-playbook -i "${IP}," {{ PLAYBOOK }}
+
+# Nuclear option: destroy ALL VMs, networks, and volumes using virsh (no Terraform state needed)
+nuke:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "⚠️  WARNING: This will destroy ALL VMs, networks, and volumes!"
+    echo "This operation cannot be undone."
+    read -p "Are you sure? (type 'yes' to confirm): " confirm
+
+    if [ "$confirm" != "yes" ]; then
+        echo "Aborted."
+        exit 0
+    fi
+
+    echo ""
+    echo "🔥 Starting cleanup..."
+    echo ""
+
+    # Destroy and undefine all running VMs
+    echo "Stopping all VMs..."
+    for vm in $(sudo virsh list --name); do
+        if [ -n "$vm" ]; then
+            echo "  - Destroying VM: $vm"
+            sudo virsh destroy "$vm" 2>/dev/null || true
+        fi
+    done
+
+    # Undefine all VMs (including stopped ones)
+    echo ""
+    echo "Removing all VM definitions..."
+    for vm in $(sudo virsh list --all --name); do
+        if [ -n "$vm" ]; then
+            echo "  - Undefining VM: $vm"
+            sudo virsh undefine "$vm" --remove-all-storage --nvram 2>/dev/null || \
+            sudo virsh undefine "$vm" --remove-all-storage 2>/dev/null || \
+            sudo virsh undefine "$vm" 2>/dev/null || true
+        fi
+    done
+
+    # Destroy and undefine all networks (except default)
+    echo ""
+    echo "Removing all networks (except 'default')..."
+    for net in $(sudo virsh net-list --all --name); do
+        if [ -n "$net" ] && [ "$net" != "default" ]; then
+            echo "  - Destroying network: $net"
+            sudo virsh net-destroy "$net" 2>/dev/null || true
+            sudo virsh net-undefine "$net" 2>/dev/null || true
+        fi
+    done
+
+    # Remove all volumes from all pools
+    echo ""
+    echo "Removing all volumes..."
+    for pool in $(sudo virsh pool-list --all --name); do
+        if [ -n "$pool" ]; then
+            echo "  - Checking pool: $pool"
+            sudo virsh pool-refresh "$pool" 2>/dev/null || true
+            for vol in $(sudo virsh vol-list "$pool" --name 2>/dev/null); do
+                if [ -n "$vol" ]; then
+                    echo "    - Deleting volume: $vol"
+                    sudo virsh vol-delete --pool "$pool" "$vol" 2>/dev/null || true
+                fi
+            done
+        fi
+    done
+
+    # Clean Terraform state and cache
+    echo ""
+    echo "Cleaning Terraform state and cache..."
+    rm -rf .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
+
+    echo ""
+    echo "✅ Cleanup complete! You can now run 'just init && just apply' to start fresh."
